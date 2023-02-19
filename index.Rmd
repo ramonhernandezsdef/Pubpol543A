@@ -1,0 +1,73 @@
+---
+title: 'Deliverable 1: Univariate Plot'
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r, message=FALSE,echo=FALSE,results='hide',warning=FALSE}
+library(rio)
+library(ggplot2)
+library(scales)
+library(ggthemes)
+library(magrittr)
+library(tidyverse)
+```
+
+```{r, message=FALSE,echo=FALSE,results='hide',warning=FALSE}
+rm(list = ls())
+mydata= read.csv('https://raw.githubusercontent.com/alyssatn/RWorkshopHW/main/Report_Card_Enrollment_from_2014-15_to_Current_Year.csv')
+```
+
+
+```{r, message=FALSE,echo=FALSE,results='hide',warning=FALSE}
+mydata6=mydata[mydata$Gradelevel=="6th Grade",]
+mydata6$All.Students=gsub(pattern = ',', replacement = "",mydata6$All.Students)
+mydata6$All.Students=as.numeric(mydata6$All.Students)
+mydata6$gap = mydata6$All.Students-78603
+mydata6$gap_lead = 100 * (mydata6$All.Students - lead(mydata6$All.Students))/lead(mydata6$All.Students)
+mydata6$PositiveGap=ifelse(mydata6$gap_lead > 0,"Yes","No")
+mydata6$PositiveGap=as.character(mydata6$PositiveGap) #I don't know if this matters but I have it here anyway
+mydata6[8,38] = "No" #manually updating the data for the 2014-2015 year
+mydata6[8,36] = 0 #manually updating the data for the 2014-2015 year
+mydata6$xlabel = c(7.8,6.8,5.3,4.3,3.3,2.3,1.3,2)#X coordinates for the line segment labels
+mydata6$ylabel = c(5273 - ((5273 - 2135)/2), 9606 - (9606 - 5273)/2, 8643 - (8643 - 9606)/2, 8643 - (8643 - 5632)/2,5632 - (5632-2707)/2, 2707 - (2702-1415)/2,(1415/2), 600)#Y coordinates for the line segment labels
+mydata6$label = c(2135-5273, 5273 - 9096, 9096 - 8643, 8643 - 5632, 5632 - 2707, 2707 - 1415, 1415, 0)
+```
+
+```{r, message=FALSE,echo=FALSE,results='hide',warning=FALSE}
+base=ggplot(data=mydata6,
+            aes(x=SchoolYear,
+                y=gap))
+plot1=base + geom_bar(fill = "black",
+                      stat = 'identity') + 
+      labs(title="Fewer 6th graders were enrolled in Washington State public schools after the Covid-19 Pandemic",
+                     x ="School Year", 
+                     y = "Change in number of 6th graders since 2014",
+                     caption = "Source: Washington State Department of Education") + 
+      theme(plot.caption = element_text(hjust = 0, size = 8),
+                      plot.title = element_text(hjust = 0.5, size = 9.5), axis.title = element_text(size = 10))
+plot2 = plot1 + geom_segment(aes(x = 1, y = 0, xend=2, yend = 1415), color = "green") + 
+        geom_segment(aes(x = 2, y = 1415, xend=3, yend = 2707), color = "green") + 
+        geom_segment(aes(x = 3, y = 2707, xend=4, yend = 5632), color = "green") + 
+        geom_segment(aes(x = 4, y = 5632, xend=5, yend = 8643), color = "green") + 
+        geom_segment(aes(x = 5, y = 8643, xend=6, yend = 9606), color = "green") + 
+        geom_segment(aes(x = 6, y = 9606, xend=7, yend = 5273), color = "red") + 
+        geom_segment(aes(x = 7, y = 5273, xend=8, yend = 2135), color = "red")  
+plot3 = plot2 + geom_text(size = 3,#fontface = "bold",
+                          aes(x =  xlabel, y = ylabel, label = paste0(round(label,0))))
+plot4 = plot3 + geom_vline(xintercept = 6.5, #where
+                           size=1.5, #thickness
+                           alpha=0.8,#transparency
+                           color = "blue") + 
+        annotate(geom = 'text', 
+                 label = "<- Start of Covid-19 pandemic",
+                 size = 2.9,
+                 y = 9001,
+                 x=7.5,
+                 angle=0)
+plot4
+```
+
+
+
