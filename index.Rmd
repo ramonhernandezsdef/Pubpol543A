@@ -35,7 +35,7 @@ mydata6$ylabel = c(5273 - ((5273 - 2135)/2), 9606 - (9606 - 5273)/2, 8643 - (864
 mydata6$label = c(2135-5273, 5273 - 9096, 9096 - 8643, 8643 - 5632, 5632 - 2707, 2707 - 1415, 1415, 0)
 ```
 
-```{r, message=FALSE,echo=FALSE,results='hide',warning=FALSE}
+```{r, message=FALSE,echo=FALSE,warning=FALSE}
 base=ggplot(data=mydata6,
             aes(x=SchoolYear,
                 y=gap))
