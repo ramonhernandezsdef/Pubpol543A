@@ -1,0 +1,67 @@
+
+---
+title: "Homework 1"
+author: "Ramon Hernandez"
+date: "2023-02-20"
+output: 
+  html_document:
+    theme:  readable
+---
+```{r ,echo=FALSE}
+library(pander)
+data(swiss)
+```
+```{r variables, echo=FALSE}
+numprov <- 47
+studydate <- 1888
+```
+
+
+## <span style="color:darkblue">Swiss Fertility Data Set (`r studydate`)</span>
+
+Switzerland, in 1888, was entering a period known as the demographic transition; i.e., its fertility was beginning to fall from the high level typical of underdeveloped countries.Mosteller, F. and Tukey, J. W. (1977) Data Analysis and Regression: A Second Course in Statistics. Addison-Wesley, Reading Mass.
+indicating their source as “Data used by permission of Franice van de Walle. Office of Population Research, Princeton University, 1976. Unpublished data assembled under NICHD contract number No 1-HD-O-2077.”
+
+
+
+### <span style="color:darkblue">Data </span>
+
+```{r ,echo=FALSE}
+pander((swiss[ , c(1,4,5)]), split.tables = 120)
+```
+
+
+
+```{r, echo=FALSE}
+x <- round(mean(swiss$Fertility), 2)
+xmn <- round(min(swiss$Fertility), 2)
+xm <- round(max(swiss$Fertility), 2)
+y <- round(mean(swiss$Education), 2)
+ymn <- round(min(swiss$Education), 2)
+ym <- round(max(swiss$Education), 2)
+z <- round(mean(swiss$Catholic), 2)
+```
+
+
+
+## <span style="color:darkblue">Maternity Averages </span>
+### <span style="color:darkblue">Fertility (`r x`)</span>
+### <span style="color:darkblue">Education (`r y`)</span>
+### <span style="color:darkblue">Catholic (`r z`)</span>
+
+
+### <span style="color:darkblue">**Education and Fertility**</span>
+
+#####  Looking specifically at the relationship between `Education` and `Fertility`, we can see that `Fertility` generally decreases as `Education` increases (see graph below). As we observed in the summary table above, the minimum and maximum values of `Fertility` are `r xmn` and `r xm`, respectively; the minimum and maximum values of `Education` are `r ymn`% and `r ym`%, respectively. 
+
+```{r twowayA, echo=FALSE}
+plot(swiss$Education, swiss$Fertility, xlab="Education (% beyond primary school, adults)", ylab="Fertility (index)", main="Fertility vs. Education", frame.plot=FALSE , col="cornflowerblue")
+```
+
+
+
+```{r twowayB, echo=FALSE}
+plot(swiss$Catholic, swiss$Fertility, xlab="Catholic (% beyond primary school, adults)", ylab="Fertility (index)", main="Fertility vs. Catholic", frame.plot=FALSE , col="cornflowerblue")
+```
+
+
